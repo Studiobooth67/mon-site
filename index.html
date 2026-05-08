@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudioBooth - Photobooth & Vidéobooth Mariage | Alsace</title>
+<meta name="description" content="Location photobooth, vidéobooth 360°, Photobooth miroir  et livre d'or pour votre mariage en Alsace. Prestation clé en main, luxe et sur-mesure. Devis gratuit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS — Palette extraite du logo StudioBooth
+   Taupe chaud dominant · Ivoire · Noir doux · Or subtil
+   ============================================================ */
+:root {
+  /* Palette principale */
+  --taupe:        #9B8E82;
+  --taupe-dark:   #6E6259;
+  --taupe-deep:   #4A3F38;
+  --taupe-light:  #BFB5AC;
+  --taupe-pale:   #D9D1C9;
+
+  /* Fonds */
+  --black:        #0D0B0A;
+  --black-soft:   #141210;
+  --ink:          #1E1A17;
+  --ink-light:    #2A2420;
+
+  /* Textes */
+  --ivory:        #F5F0EB;
+  --ivory-muted:  #C8BFB8;
+  --fog:          #7A7068;
+
+  /* Accents */
+  --gold:         #C4A96A;
+  --gold-light:   #D9BF8A;
+  --white:        #FFFFFF;
+
+  /* Bordures */
+  --border:       rgba(155,142,130,0.2);
+  --border-s:     rgba(155,142,130,0.1);
+
+  /* Typo */
+  --serif:  'Cormorant Garamond', Georgia, serif;
+  --sans:   'Jost', system-ui, sans-serif;
+
+  /* Easings */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================ RESET */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--black); color: var(--ivory); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* ============================================================ CURSOR */
+.cur, .cur-r { position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); border-radius: 50%; }
+.cur { width: 10px; height: 10px; background: var(--taupe); transition: width .3s var(--ease), height .3s var(--ease); }
+.cur-r { width: 34px; height: 34px; border: 1px solid rgba(155,142,130,.3); transition: width .35s var(--ease), height .35s var(--ease); top: 0; left: 0; }
+body.hl .cur { width: 52px; height: 52px; opacity: .5; }
+body.hl .cur-r { width: 0; height: 0; }
+
+/* ============================================================ SCROLL THREAD */
+.thread { position: fixed; left: 32px; top: 0; bottom: 0; width: 1px; z-index: 50; pointer-events: none; }
+.thread::before { content:''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, var(--taupe), transparent); opacity: .12; }
+.thread-bar { position: absolute; top: 0; left: 0; width: 1px; height: 0%; background: var(--taupe); transition: height .08s linear; box-shadow: 0 0 6px var(--taupe); }
+
+/* ============================================================ NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 76px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 60px;
+  transition: background .4s, border-color .4s;
+}
+nav.scrolled { background: rgba(13,11,10,.9); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+
+.nav-logo { display: flex; align-items: center; gap: 12px; }
+.nav-logo img { height: 48px; width: 48px; object-fit: contain; border-radius: 50%; }
+.nav-logo-text { font-family: var(--serif); font-size: 18px; font-weight: 400; letter-spacing: .06em; color: var(--ivory); line-height: 1.2; }
+.nav-logo-sub { font-family: var(--sans); font-size: 10px; font-weight: 300; letter-spacing: .2em; text-transform: uppercase; color: var(--taupe-light); display: block; }
+
+.nav-links { display: flex; list-style: none; gap: 36px; }
+.nav-links a { font-size: 12px; font-weight: 300; letter-spacing: .14em; text-transform: uppercase; color: var(--fog); transition: color .2s; position: relative; }
+.nav-links a::after { content:''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--taupe); transition: width .3s var(--ease); }
+.nav-links a:hover { color: var(--ivory); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta { padding: 11px 28px; border: 1px solid var(--taupe); color: var(--taupe-pale); font-size: 11px; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; transition: all .25s; }
+.nav-cta:hover { background: var(--taupe); color: var(--black); }
+.nav-ham { display: none; flex-direction: column; gap: 5px; padding: 8px; }
+.nav-ham span { display: block; width: 22px; height: 1px; background: var(--ivory); transition: all .3s; }
+
+/* ============================================================ HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 55% 60% at 72% 45%, rgba(155,142,130,.09) 0%, transparent 65%),
+              radial-gradient(ellipse 35% 40% at 15% 70%, rgba(155,142,130,.05) 0%, transparent 60%);
+}
+.hero-grain { position: absolute; inset: 0; opacity: .03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; }
+
+/* Col texte */
+.hero-left { display: flex; flex-direction: column; justify-content: center; padding: 120px 64px 80px 104px; position: relative; z-index: 2; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 11px; font-weight: 300; letter-spacing: .22em; text-transform: uppercase; color: var(--taupe-light);
+  margin-bottom: 44px;
+  opacity: 0; animation: fadeUp .8s var(--ease) .15s both;
+}
+.hero-tag::before { content:''; width: 28px; height: 1px; background: var(--taupe); }
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(50px, 5.5vw, 82px);
+  font-weight: 300; line-height: 1.05; color: var(--ivory);
+  margin-bottom: 30px;
+  opacity: 0; animation: fadeUp .9s var(--ease) .3s both;
+}
+.hero-h1 em { font-style: italic; color: var(--taupe-light); display: block; }
+
+.hero-sub {
+  font-size: 16px; font-weight: 300; line-height: 1.8; color: var(--fog);
+  max-width: 420px; margin-bottom: 52px;
+  opacity: 0; animation: fadeUp .9s var(--ease) .45s both;
+}
+
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp .9s var(--ease) .6s both; }
+
+.btn-taupe {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px; background: var(--taupe); color: var(--black);
+  font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  transition: background .25s, transform .2s, box-shadow .25s; cursor: pointer;
+}
+.btn-taupe:hover { background: var(--taupe-light); transform: translateY(-2px); box-shadow: 0 10px 32px rgba(155,142,130,.25); }
+.btn-taupe svg { transition: transform .25s; }
+.btn-taupe:hover svg { transform: translateX(4px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px; border: 1px solid rgba(155,142,130,.3); color: var(--ivory-muted);
+  font-size: 11px; font-weight: 300; letter-spacing: .14em; text-transform: uppercase;
+  transition: border-color .25s, color .25s; cursor: pointer;
+}
+.btn-ghost:hover { border-color: var(--taupe); color: var(--taupe-pale); }
+
+/* Col image hero */
+.hero-right { position: relative; overflow: hidden; opacity: 0; animation: fadeIn 1.4s var(--ease) .3s both; }
+.hero-right img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero-right-overlay { position: absolute; inset: 0; background: linear-gradient(to right, var(--black) 0%, rgba(13,11,10,.2) 30%, transparent 60%); }
+
+/* Carte flottante */
+.hero-card {
+  position: absolute; bottom: 72px; left: -28px; z-index: 5;
+  background: rgba(20,18,16,.92); border: 1px solid var(--border);
+  backdrop-filter: blur(12px); padding: 22px 28px;
+  animation: float 6s ease-in-out infinite;
+}
+.hero-card-num { font-family: var(--serif); font-size: 40px; font-weight: 300; color: var(--taupe-light); line-height: 1; margin-bottom: 6px; }
+.hero-card-lbl { font-size: 11px; font-weight: 300; letter-spacing: .14em; text-transform: uppercase; color: var(--fog); }
+
+/* Badge dispo */
+.hero-badge {
+  position: absolute; top: 96px; right: 32px; z-index: 5;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px; background: rgba(20,18,16,.88); border: 1px solid var(--border);
+  backdrop-filter: blur(10px); font-size: 11px; letter-spacing: .1em; color: var(--ivory);
+  animation: float 5s ease-in-out 1s infinite;
+}
+.badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #6EE7B7; box-shadow: 0 0 7px #6EE7B7; animation: pulse 2s infinite; }
+
+/* Scroll cue */
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 104px; z-index: 5;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 10px; font-weight: 300; letter-spacing: .2em; text-transform: uppercase; color: var(--fog);
+  opacity: 0; animation: fadeUp .8s var(--ease) 1.2s both;
+}
+.scroll-line { width: 44px; height: 1px; background: var(--fog); position: relative; overflow: hidden; }
+.scroll-line::after { content:''; position: absolute; top:0; left:-100%; width:100%; height:100%; background: var(--taupe-light); animation: scan 2.5s ease infinite; }
+
+/* ============================================================ TICKER */
+.ticker { padding: 20px 0; border-top: 1px solid var(--border-s); border-bottom: 1px solid var(--border-s); overflow: hidden; }
+.ticker-track { display: flex; gap: 56px; animation: tickerScroll 22s linear infinite; width: max-content; }
+.ticker-track:hover { animation-play-state: paused; }
+.ticker-item { font-family: var(--serif); font-size: 14px; font-weight: 300; letter-spacing: .18em; text-transform: uppercase; color: var(--fog); white-space: nowrap; display: flex; align-items: center; gap: 14px; }
+.ticker-item span { color: var(--taupe); font-size: 10px; }
+
+/* ============================================================ SECTIONS */
+section { position: relative; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 60px; }
+.wrap-sm { max-width: 1000px; margin: 0 auto; padding: 0 60px; }
+
+.eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 10px; font-weight: 400; letter-spacing: .24em; text-transform: uppercase; color: var(--taupe); margin-bottom: 22px; }
+.eyebrow::before { content:''; width: 22px; height: 1px; background: var(--taupe); flex-shrink: 0; }
+
+h2.sh { font-family: var(--serif); font-size: clamp(34px, 4vw, 56px); font-weight: 300; line-height: 1.1; color: var(--ivory); }
+h2.sh em { font-style: italic; color: var(--taupe-light); }
+
+/* ============================================================ PRESTATIONS */
+.presta-sec { padding: 130px 0; background: var(--black-soft); }
+.presta-head { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; margin-bottom: 72px; }
+.presta-head-sub { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--fog); }
+
+.presta-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; grid-template-rows: auto auto; gap: 2px; background: var(--border-s); }
+
+.pc { background: var(--black-soft); padding: 44px 36px; position: relative; overflow: hidden; cursor: pointer; transition: background .3s; }
+.pc:hover { background: var(--ink); }
+.pc::before { content:''; position: absolute; top:0; left:0; right:0; height:2px; background: var(--taupe); transform: scaleX(0); transform-origin: left; transition: transform .4s var(--ease); }
+.pc:hover::before { transform: scaleX(1); }
+
+.pc--big { grid-row: 1/3; display: flex; flex-direction: column; justify-content: flex-end; min-height: 540px; padding: 52px 44px; }
+.pc--big .pc-img { position: absolute; inset: 0; }
+.pc--big .pc-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform .8s var(--ease); }
+.pc--big:hover .pc-img img { transform: scale(1.04); }
+.pc--big .pc-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,11,10,.95) 0%, rgba(13,11,10,.4) 55%, rgba(13,11,10,.1) 100%); }
+.pc--big .pc-content { position: relative; z-index: 2; }
+
+.pc-img-sm { position: absolute; inset: 0; overflow: hidden; opacity: 1; transition: opacity .3s; }
+.pc-img-sm img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(0.16,1,0.3,1); }
+.pc:hover .pc-img-sm img { transform: scale(1.05); }
+.pc:hover .pc-img-sm { opacity: 1; }
+
+.pc .pc-img-sm::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(8,6,5,0.97) 0%,
+    rgba(8,6,5,0.80) 40%,
+    rgba(8,6,5,0.45) 70%,
+    rgba(8,6,5,0.15) 100%
+  );
+  z-index: 1;
+}.pc-num { font-family: var(--serif); font-size: 72px; font-weight: 300; color: rgba(155,142,130,.07); position: absolute; top: 16px; right: 20px; line-height: 1; pointer-events: none; transition: color .3s; }
+.pc:hover .pc-num { color: rgba(155,142,130,.12); }
+.pc--big .pc-num { font-size: 100px; }
+
+.pc-tag { font-size: 10px; font-weight: 400; letter-spacing: .2em; text-transform: uppercase; color: var(--taupe); margin-bottom: 12px; position: relative; z-index: 2; }
+.pc-title { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ivory); margin-bottom: 14px; line-height: 1.2; position: relative; z-index: 2; } font-weight: 400; color: var(--ivory); margin-bottom: 14px; line-height: 1.2; position: relative; z-index: 2; } font-weight: 400; color: var(--ivory); margin-bottom: 14px; line-height: 1.2; position: relative; z-index: 2; } font-weight: 400; color: var(--ivory); margin-bottom: 14px; line-height: 1.2; }
+.pc--big .pc-title { font-size: 36px; margin-bottom: 16px; }
+.pc-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--ivory-muted); margin-bottom: 32px; position: relative; z-index: 2; }
+.pc-cta { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--taupe-light); transition: gap .25s; position: relative; z-index: 2; } font-weight: 400; letter-spacing: .12em; text-transform: uppercase; color: var(--taupe-light); transition: gap .25s; }
+.pc:hover .pc-cta { gap: 14px; }
+
+/* ============================================================ GALERIE */
+.gallery-sec { padding: 130px 0; background: var(--black); }
+.gallery-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; flex-wrap: wrap; gap: 24px; }
+.gallery-handle { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--taupe-light); }
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 300px 300px;
+  gap: 3px;
+}
+.gi { position: relative; overflow: hidden; background: var(--ink); cursor: pointer; }
+.gi:nth-child(1) { grid-column: 1/5; grid-row: 1/3; }
+.gi:nth-child(2) { grid-column: 5/9; grid-row: 1/2; }
+.gi:nth-child(3) { grid-column: 9/13; grid-row: 1/2; }
+.gi:nth-child(4) { grid-column: 5/8; grid-row: 2/3; }
+.gi:nth-child(5) { grid-column: 8/11; grid-row: 2/3; }
+.gi:nth-child(6) { grid-column: 11/13; grid-row: 2/3; }
+
+.gi img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); display: block; }
+.gi:hover img { transform: scale(1.06); }
+
+.gi-overlay { position: absolute; inset: 0; background: rgba(13,11,10,.65); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; opacity: 0; transition: opacity .3s; }
+.gi:hover .gi-overlay { opacity: 1; }
+.gi-overlay svg { color: var(--taupe-light); }
+.gi-overlay span { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ivory); }
+
+/* ============================================================ BÉNÉFICES */
+.benef-sec { padding: 130px 0; background: var(--black-soft); }
+.benef-inner { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; }
+.benef-sticky { position: sticky; top: 96px; }
+.benef-list {}
+.benef-item { display: grid; grid-template-columns: 64px 1fr; gap: 28px; align-items: start; padding: 36px 0; border-bottom: 1px solid var(--border-s); transition: border-color .3s; }
+.benef-item:first-child { border-top: 1px solid var(--border-s); }
+.benef-item:hover { border-color: var(--border); }
+.benef-n { font-family: var(--serif); font-size: 48px; font-weight: 300; color: rgba(155,142,130,.15); line-height: 1; transition: color .3s; }
+.benef-item:hover .benef-n { color: rgba(155,142,130,.28); }
+.benef-title { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--ivory); margin-bottom: 10px; }
+.benef-text { font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--fog); }
+
+/* ============================================================ TÉMOIGNAGES */
+.testi-sec { padding: 130px 0; background: var(--black); }
+.counters { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; background: var(--border-s); margin-bottom: 80px; }
+.counter { background: var(--black); padding: 44px 36px; text-align: center; transition: background .25s; }
+.counter:hover { background: var(--ink); }
+.c-n { font-family: var(--serif); font-size: 54px; font-weight: 300; color: var(--taupe-light); line-height: 1; display: block; margin-bottom: 10px; }
+.c-l { font-size: 10px; font-weight: 300; letter-spacing: .18em; text-transform: uppercase; color: var(--fog); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: var(--border-s); }
+.tc { background: var(--black); padding: 44px 36px; position: relative; transition: background .25s; }
+.tc:hover { background: var(--ink); }
+.tc::before { content:'"'; font-family: var(--serif); font-size: 100px; color: rgba(155,142,130,.06); position: absolute; top: 8px; left: 28px; line-height: 1; pointer-events: none; }
+.tc-stars { display: flex; gap: 3px; margin-bottom: 22px; }
+.tc-star { color: var(--taupe-light); }
+.tc-quote { font-family: var(--serif); font-size: 17px; font-style: italic; font-weight: 300; line-height: 1.7; color: var(--ivory); margin-bottom: 28px; position: relative; z-index: 1; }
+.tc-author { display: flex; align-items: center; gap: 12px; }
+.tc-av { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--taupe) 0%, var(--ink-light) 100%); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 14px; color: var(--black); flex-shrink: 0; }
+.tc-name { font-size: 13px; font-weight: 400; color: var(--ivory); margin-bottom: 3px; }
+.tc-evt { font-size: 11px; color: var(--fog); }
+
+/* ============================================================ FAQ */
+.faq-sec { padding: 130px 0; background: var(--black-soft); }
+.faq-lay { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; }
+.faq-st { position: sticky; top: 96px; }
+.faq-contact { margin-top: 36px; display: flex; flex-direction: column; gap: 12px; }
+.faq-contact a { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 300; letter-spacing: .1em; color: var(--taupe-light); transition: color .2s; padding: 12px 0; border-bottom: 1px solid var(--border-s); }
+.faq-contact a:hover { color: var(--ivory); }
+
+.faq-list { border-top: 1px solid var(--border-s); }
+.faq-item { border-bottom: 1px solid var(--border-s); }
+.faq-q { width: 100%; background: none; border: none; padding: 26px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; text-align: left; color: var(--ivory); font-size: 15px; font-weight: 300; line-height: 1.5; cursor: pointer; transition: color .2s; }
+.faq-q:hover { color: var(--taupe-pale); }
+.faq-icon { width: 26px; height: 26px; min-width: 26px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--taupe); transition: all .3s var(--ease); font-size: 18px; }
+.faq-item.open .faq-icon { background: var(--taupe); color: var(--black); border-color: var(--taupe); transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .4s var(--ease), padding .3s; font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--fog); }
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 26px; }
+
+/* ============================================================ CTA */
+.cta-sec { padding: 160px 0; background: var(--taupe-dark); text-align: center; position: relative; overflow: hidden; }
+.cta-sec::before { content:'StudioBooth'; position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family: var(--serif); font-size: clamp(60px, 12vw, 180px); font-weight: 300; color: rgba(13,11,10,.08); white-space: nowrap; pointer-events: none; letter-spacing: .15em; }
+.cta-sec .eyebrow { color: rgba(245,240,235,.45); justify-content: center; }
+.cta-sec .eyebrow::before { background: rgba(245,240,235,.3); }
+.cta-sec .sh { color: var(--ivory); margin-bottom: 18px; }
+.cta-sec .sh em { color: rgba(245,240,235,.6); }
+.cta-sec p { font-size: 16px; font-weight: 300; color: rgba(245,240,235,.55); margin-bottom: 48px; }
+
+.btn-dark { display: inline-flex; align-items: center; gap: 10px; padding: 18px 44px; background: var(--black); color: var(--ivory); font-size: 11px; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; transition: background .25s, transform .2s, box-shadow .25s; cursor: pointer; }
+.btn-dark:hover { background: var(--ink); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(13,11,10,.4); }
+.btn-dark svg { transition: transform .25s; }
+.btn-dark:hover svg { transform: translateX(4px); }
+
+/* ============================================================ FOOTER */
+footer { background: var(--black-soft); border-top: 1px solid var(--border-s); padding: 72px 0 36px; }
+.ft { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+.ft-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.ft-logo img { width: 56px; height: 56px; object-fit: contain; border-radius: 50%; }
+.ft-logo-txt { font-family: var(--serif); font-size: 20px; font-weight: 300; color: var(--ivory); letter-spacing: .04em; }
+.ft-logo-txt small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--taupe); font-style: normal; margin-top: 3px; }
+.ft-desc { font-size: 13px; font-weight: 300; line-height: 1.8; color: var(--fog); margin-bottom: 28px; max-width: 280px; }
+.ft-socials { display: flex; gap: 10px; }
+.ft-soc { width: 36px; height: 36px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--fog); transition: all .25s; }
+.ft-soc:hover { border-color: var(--taupe); color: var(--taupe-light); }
+.ft-col h4 { font-size: 10px; font-weight: 400; letter-spacing: .22em; text-transform: uppercase; color: var(--taupe-dark); margin-bottom: 22px; }
+.ft-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.ft-links a { font-size: 13px; font-weight: 300; color: var(--fog); transition: color .2s; }
+.ft-links a:hover { color: var(--ivory); }
+.ft-bottom { border-top: 1px solid var(--border-s); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.ft-copy { font-size: 12px; color: var(--taupe-dark); }
+.ft-copy span { color: var(--taupe); }
+
+/* ============================================================ MODAL */
+.modal-ov { position: fixed; inset: 0; background: rgba(8,6,5,.94); backdrop-filter: blur(10px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; padding: 20px; }
+.modal-ov.open { opacity: 1; pointer-events: all; }
+.modal-box { background: var(--ink); border: 1px solid var(--border); width: 100%; max-width: 580px; max-height: 92vh; overflow-y: auto; padding: 52px 48px; position: relative; transform: translateY(24px) scale(.98); transition: transform .4s var(--ease); }
+.modal-ov.open .modal-box { transform: translateY(0) scale(1); }
+.modal-x { position: absolute; top: 20px; right: 20px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); color: var(--fog); transition: all .2s; cursor: pointer; }
+.modal-x:hover { border-color: var(--taupe); color: var(--taupe-light); }
+
+.steps-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 40px; }
+.s-pip { height: 3px; border-radius: 2px; background: var(--border); flex: 1; transition: background .4s; }
+.s-pip.active { background: var(--taupe); }
+.s-pip.done { background: rgba(155,142,130,.35); }
+.s-lbl { font-size: 10px; font-weight: 300; letter-spacing: .14em; color: var(--fog); white-space: nowrap; }
+
+.mh3 { font-family: var(--serif); font-size: 30px; font-weight: 300; color: var(--ivory); margin-bottom: 8px; }
+.mh3 em { font-style: italic; color: var(--taupe-light); }
+.msub { font-size: 13px; font-weight: 300; color: var(--fog); margin-bottom: 36px; line-height: 1.6; }
+
+.fs { display: none; }
+.fs.active { display: block; }
+
+.field { margin-bottom: 22px; }
+.field label { display: block; font-size: 10px; font-weight: 400; letter-spacing: .18em; text-transform: uppercase; color: var(--taupe-dark); margin-bottom: 10px; }
+.field input, .field select, .field textarea { width: 100%; background: var(--black); border: none; border-bottom: 1px solid var(--border); color: var(--ivory); font-family: var(--sans); font-size: 15px; font-weight: 300; padding: 12px 0; outline: none; transition: border-color .2s; appearance: none; }
+.field input:focus, .field select:focus, .field textarea:focus { border-bottom-color: var(--taupe); }
+.field textarea { resize: vertical; min-height: 88px; }
+.field input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(.2); cursor: pointer; }
+
+.chk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chk-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 13px; font-weight: 300; color: var(--fog); padding: 13px 14px; border: 1px solid var(--border); transition: all .2s; }
+.chk-label:hover { border-color: var(--taupe); color: var(--ivory); }
+.chk-label:has(input:checked) { border-color: var(--taupe); background: rgba(155,142,130,.07); color: var(--ivory); }
+.chk-label input { display: none; }
+.chk-box { width: 16px; height: 16px; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 10px; color: var(--taupe); }
+
+.mactions { display: flex; gap: 10px; margin-top: 36px; align-items: center; }
+.mbk { padding: 15px 22px; border: 1px solid var(--border); color: var(--fog); font-size: 11px; font-weight: 300; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all .2s; font-family: var(--sans); }
+.mbk:hover { border-color: var(--taupe); color: var(--ivory); }
+.mok { flex: 1; padding: 16px; background: var(--taupe); color: var(--black); font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .2s; }
+.mok:hover { background: var(--taupe-light); }
+
+.success { text-align: center; padding: 16px 0; }
+.s-ring { width: 68px; height: 68px; border: 1px solid var(--taupe); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--taupe-light); }
+
+/* ============================================================ FLOATS */
+.float-mob { display: none; position: fixed; bottom: 16px; left: 12px; right: 12px; z-index: 89; background: var(--taupe); color: var(--black); font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; padding: 18px; text-align: center; border: none; cursor: pointer; box-shadow: 0 8px 32px rgba(155,142,130,.3); }
+.wa { position: fixed; bottom: 32px; right: 32px; width: 52px; height: 52px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 88; box-shadow: 0 4px 20px rgba(37,211,102,.3); transition: transform .2s, box-shadow .2s; text-decoration: none; }
+.wa:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(37,211,102,.4); }
+
+/* ============================================================ ANIMATIONS */
+@keyframes fadeUp { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+@keyframes scan { 0%{left:-100%} 100%{left:100%} }
+@keyframes tickerScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+.rv { opacity:0; transform:translateY(30px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.rv.vis { opacity:1; transform:translateY(0); }
+.rv.d1{transition-delay:.1s} .rv.d2{transition-delay:.2s} .rv.d3{transition-delay:.3s} .rv.d4{transition-delay:.4s}
+
+/* ============================================================ RESPONSIVE */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-left{padding:110px 40px 80px 76px}
+  .hero-right{min-height:55vh}
+  .hero-scroll{left:76px}
+  .presta-grid{grid-template-columns:1fr 1fr}
+  .pc--big{grid-row:auto;grid-column:1/3;min-height:300px}
+  .benef-inner{grid-template-columns:1fr;gap:40px}
+  .benef-sticky{position:static}
+  .gallery-grid{grid-template-columns:repeat(6,1fr);grid-template-rows:200px 200px 200px}
+  .gi:nth-child(1){grid-column:1/4;grid-row:1/3}
+  .gi:nth-child(2){grid-column:4/7;grid-row:1/2}
+  .gi:nth-child(3){grid-column:4/7;grid-row:2/3}
+  .gi:nth-child(4){grid-column:1/3;grid-row:3/4}
+  .gi:nth-child(5){grid-column:3/5;grid-row:3/4}
+  .gi:nth-child(6){grid-column:5/7;grid-row:3/4}
+  .counters{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:1fr}
+  .faq-lay{grid-template-columns:1fr;gap:36px}
+  .faq-st{position:static}
+  .ft{grid-template-columns:1fr 1fr;gap:36px}
+  .presta-head{grid-template-columns:1fr}
+  .thread{left:16px}
+}
+@media(max-width:768px){
+  .wrap,.wrap-sm{padding:0 20px}
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .nav-ham{display:flex}
+  .nav-cta{display:none}
+  .hero-left{padding:100px 20px 80px}
+  .hero-scroll{left:20px}
+  .presta-sec,.gallery-sec,.benef-sec,.testi-sec,.faq-sec,.cta-sec{padding:80px 0}
+  .presta-grid{grid-template-columns:1fr}
+  .pc--big{grid-column:auto}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:180px 180px 180px}
+  .gi:nth-child(1){grid-column:1/3;grid-row:1/2}
+  .gi:nth-child(2){grid-column:1/2;grid-row:2/3}
+  .gi:nth-child(3){grid-column:2/3;grid-row:2/3}
+  .gi:nth-child(4){grid-column:1/2;grid-row:3/4}
+  .gi:nth-child(5){grid-column:2/3;grid-row:3/4}
+  .gi:nth-child(6){display:none}
+  .ft{grid-template-columns:1fr;gap:28px}
+  .float-mob{display:block}
+  .wa{bottom:84px;right:16px}
+  .modal-box{padding:36px 22px}
+  .chk-grid{grid-template-columns:1fr}
+  .mactions{flex-direction:column-reverse}
+  .mbk,.mok{width:100%;justify-content:center}
+  .hero-card{left:-4px}
+  .thread{display:none}
+}
+@media(max-width:480px){
+  .hero-btns{flex-direction:column}
+  .btn-taupe,.btn-ghost{width:100%;justify-content:center}
+  .hero-badge{top:78px;right:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ÉLÉMENTS PERSISTANTS -->
+<div class="thread"><div class="thread-bar" id="tb"></div></div>
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+
+<!-- ══════════════════════════════════════════════════════ NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <img src="images/logooo.webp" alt="StudioBooth Logo">
+    <div>
+      <span class="nav-logo-text">StudioBooth<small></small></span>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#prestations">Prestations</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#avis">Avis</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+
+  <button class="nav-cta" onclick="openModal()">Devis gratuit</button>
+  <button class="nav-ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ HERO -->
+<div class="hero" id="home">
+  <div class="hero-glow"></div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-left">
+    <span class="hero-tag">Alsace & France · Mariage & Événement</span>
+    <h1 class="hero-h1">Vos souvenirs<br>méritent<br><em>l'exception.</em></h1>
+    <p class="hero-sub">Photobooth noir, Photobooth Miroir, Vidéobooth 360° et Livre d'or — une prestation clé en main pour un mariage inoubliable.</p>
+    <div class="hero-btns">
+      <button class="btn-taupe" onclick="openModal()">
+        Obtenir mon devis
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <a href="#galerie" class="btn-ghost">
+        Voir nos créations
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 3v9M3.5 8.5l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Hero image : photobooth dans salle de mariage dorée -->
+    <img src="images/phtbthblanc2.webp" alt="Photobooth mariage luxe Alsace">
+    <div class="hero-right-overlay"></div>
+
+    
+
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Dates disponibles 2026
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Découvrir
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Strasbourg <span>✦</span></span>
+    <span class="ticker-item">Colmar <span>✦</span></span>
+    <span class="ticker-item">Mulhouse <span>✦</span></span>
+    <span class="ticker-item">Nancy <span>✦</span></span>
+    <span class="ticker-item">Metz <span>✦</span></span>
+    <span class="ticker-item">Paris <span>✦</span></span>
+    <span class="ticker-item">Lyon <span>✦</span></span>
+    <span class="ticker-item">Toute la France <span>✦</span></span>
+    <span class="ticker-item">Strasbourg <span>✦</span></span>
+    <span class="ticker-item">Colmar <span>✦</span></span>
+    <span class="ticker-item">Mulhouse <span>✦</span></span>
+    <span class="ticker-item">Nancy <span>✦</span></span>
+    <span class="ticker-item">Metz <span>✦</span></span>
+    <span class="ticker-item">Paris <span>✦</span></span>
+    <span class="ticker-item">Lyon <span>✦</span></span>
+    <span class="ticker-item">Toute la France <span>✦</span></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PRESTATIONS -->
+<section class="presta-sec" id="prestations">
+  <div class="wrap">
+    <div class="presta-head rv">
+      <div>
+        <div class="eyebrow">Nos prestations</div>
+        <h2 class="sh">Choisissez votre<br><em>expérience.</em></h2>
+      </div>
+      <p class="presta-head-sub">De l'animation classique à la technologie 360°, chaque prestation est pensée pour créer des souvenirs inoubliables.</p>
+    </div>
+
+    <div class="presta-grid rv">
+
+      <!-- Grande carte : Photobooth miroir (photo principale) -->
+      <div class="pc pc--big" onclick="openModal()">
+        <div class="pc-img">
+          <img src="images/phtbthblanc2.webp" alt="Photobooth mariage luxe">
+        </div>
+        <div class="pc-overlay"></div>
+        <span class="pc-num">01</span>
+        <div class="pc-content">
+          <div class="pc-tag">Le PREMIUM
+            
+          </div>
+          <div class="pc-title">Photobooth Miroir</div>
+          <p class="pc-desc">Photobooth miroir interactif grand format, cadre doré ou blanc au choix, tapis blanc et cordon VIP. Une expérience luxueuse pour vos invités.</p>
+          <div class="pc-cta">Demander un devis <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Photobooth Noir -->
+      <div class="pc" onclick="openModal()">
+        <div class="pc-img-sm"><img src="images/photobooth.webp" alt="Photobooth miroir blanc mariage">
+        </div>
+        <span class="pc-num">02</span>
+        <div class="pc-tag">CLASSIQUE</div>
+        <div class="pc-title">Photobooth Noir</div>
+        <p class="pc-desc">Impressions instantanées, projecteur professionel intégrée, accessoires inclus. L'animation incontournable qui rassemble tous vos invités.</p>
+        <div class="pc-cta">Devis <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <!-- Vidéobooth 360° -->
+      <div class="pc" onclick="openModal()">
+        <div class="pc-img-sm"><img src="images/videobooth.webp" alt="Vidéobooth 360"></div>
+        <span class="pc-num">03</span>
+        <div class="pc-tag">Tendance 2026</div>
+        <div class="pc-title">Vidéobooth<br>360°</div>
+        <p class="pc-desc">Plateforme rotative LED en verre, 115cm de diamètre, bras motorisé, vidéos cinématiques. L'effet wow garanti de votre soirée.</p>
+        <div class="pc-cta">Devis <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <!-- Livre d'or vidéo -->
+      <div class="pc" onclick="openModal()">
+        <div class="pc-img-sm"><img src="images/video.webp" alt="Borne photobooth fleurie"></div>
+        <span class="pc-num">04</span>
+        <div class="pc-tag">Romantique</div>
+        <div class="pc-title">Livre d'or<br>Vidéo</div>
+        <p class="pc-desc">Livre d'or vidéo habillée de fleurs blanches, lumière LED. Messages vidéo enregistrés par vos invités. Un décor à couper le souffle.</p>
+        <div class="pc-cta">Devis <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <!-- Livre d'or audio -->
+      <div class="pc" onclick="openModal()">
+        <div class="pc-img-sm"><img src="images/audio.webp" alt="Livre d'or audio téléphone vintage"></div>
+        <span class="pc-num">05</span>
+        <div class="pc-tag">Émouvant</div>
+        <div class="pc-title">Livre d'or<br>Audio</div>
+        <p class="pc-desc">Téléphone vintage ivoire, messages enregistrés par vos invités. Un souvenir intime et précieux pour toute la vie.</p>
+        <div class="pc-cta">Devis <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ GALERIE -->
+<section class="gallery-sec" id="galerie">
+  <div class="wrap">
+    <div class="gallery-head rv">
+      <div>
+        <div class="eyebrow">Notre galerie</div>
+        <h2 class="sh">Ils nous ont<br><em>fait confiance.</em></h2>
+      </div>
+      <div style="text-align:right">
+        <a href="https://www.instagram.com/Studiobooth_" target="_blank" class="gallery-handle">@Studiobooth_</a>
+        <div style="margin-top:14px">
+          <a href="https://www.instagram.com/Studiobooth_" target="_blank" class="btn-ghost" style="font-size:10px;padding:11px 22px">
+            Suivre sur Instagram
+            <svg width="13" height="13" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-grid rv">
+      <div class="gi">
+        <img src="images/phtbthblanc2.webp" alt="Photobooth mariage salle dorée Alsace" loading="lazy">
+        <div class="gi-overlay">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>@Studiobooth_</span>
+        </div>
+      </div>
+      <div class="gi">
+        <img src="images/photobooth.webp" alt="Photobooth " loading="lazy">
+        <div class="gi-overlay">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>@Studiobooth_</span>
+        </div>
+      </div>
+      <div class="gi">
+        <img src="images/videobooth.webp" alt="Borne photobooth fleurie mariage" loading="lazy">
+        <div class="gi-overlay">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>@Studiobooth_</span>
+        </div>
+      </div>
+      <div class="gi">
+        <img src="images/video.webp" alt="Vidéobooth 360 plateforme LED" loading="lazy">
+        <div class="gi-overlay">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>@Studiobooth_</span>
+        </div>
+      </div>
+      <div class="gi">
+        <img src="images/audio.webp" alt="Livre d'or audio téléphone vintage ivoire" loading="lazy">
+        <div class="gi-overlay">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>@Studiobooth_</span>
+        </div>
+      </div>
+      <div class="gi">
+        <img src="images/phtbthblanc2.webp" alt="StudioBooth mariage élégant" loading="lazy" style="object-position: top;">
+        <div class="gi-overlay">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span>@Studiobooth_</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ BÉNÉFICES -->
+<section class="benef-sec">
+  <div class="wrap">
+    <div class="benef-inner">
+      <div class="benef-sticky rv">
+        <div class="eyebrow">Pourquoi nous choisir</div>
+        <h2 class="sh">Votre mariage,<br><em>notre passion.</em></h2>
+        <p style="margin-top:22px;font-size:14px;font-weight:300;line-height:1.8;color:var(--fog)">200 mariages. Zéro compromis. Une équipe passionnée basée en Alsace, qui s'occupe de tout pour que vous profitiez pleinement.</p>
+      </div>
+      <div class="benef-list">
+        <div class="benef-item rv d1">
+          <div class="benef-n">01</div>
+          <div><div class="benef-title">Clé en main, sans stress</div><p class="benef-text">Livraison, installation, animation, récupération — tout est géré par notre équipe. Vous profitez de chaque instant de votre soirée sans vous soucier de rien.</p></div>
+        </div>
+        <div class="benef-item rv d2">
+          <div class="benef-n">02</div>
+          <div><div class="benef-title">100% sur-mesure</div><p class="benef-text">Habillage, couleurs, filtres, cadres, messages — chaque détail est personnalisé à votre identité de mariage. Votre prestation est unique, comme votre histoire.</p></div>
+        </div>
+        <div class="benef-item rv d3">
+          <div class="benef-n">03</div>
+          <div><div class="benef-title">Souvenirs pour toujours</div><p class="benef-text">Impressions instantanées, galerie digitale complète, vidéos HD. Vos invités repartent avec un souvenir physique. Vous gardez tout en numérique.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ TÉMOIGNAGES -->
+<section class="testi-sec" id="avis">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:60px" class="rv">
+      <div class="eyebrow" style="justify-content:center">Ils nous font confiance</div>
+      <h2 class="sh">Ils ont dit <em>oui.</em></h2>
+    </div>
+
+    <div class="counters rv">
+      <div class="counter"><span class="c-n" data-target="200" data-suffix="+">0</span><span class="c-l">Mariages accompagnés</span></div>
+      <div class="counter"><span class="c-n" data-target="4.9" data-dec>0</span><span class="c-l">Note moyenne / 5</span></div>
+      <div class="counter"><span class="c-n" data-target="5000" data-suffix="+">0</span><span class="c-l">Photos partagées</span></div>
+      <div class="counter"><span class="c-n" data-target="100" data-suffix="%">0</span><span class="c-l">Couples satisfaits</span></div>
+    </div>
+
+    <div class="testi-grid">
+      <div class="tc rv">
+        <div class="tc-stars">
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+        </div>
+        <p class="tc-quote">"Le Vidéobooth 360° a été LE moment de notre soirée. Nos invités en parlent encore six mois après. On ne regrette absolument pas notre choix !"</p>
+        <div class="tc-author"><div class="tc-av">CJ</div><div><div class="tc-name">Camille & Julien</div><div class="tc-evt">Mariage · Juin 2024 · Strasbourg</div></div></div>
+      </div>
+      <div class="tc rv d1">
+        <div class="tc-stars">
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+        </div>
+        <p class="tc-quote">"Service parfait de A à Z. Installation discrète, équipe souriante, résultat magnifique. Le miroir blanc avec le décor doré était juste sublime."</p>
+        <div class="tc-author"><div class="tc-av">NA</div><div><div class="tc-name">Nesrine & Abdel-Ilah</div><div class="tc-evt">Mariage · Mai 2026 · Colmar</div></div></div>
+      </div>
+      <div class="tc rv d2">
+        <div class="tc-stars">
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+          <svg class="tc-star" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1l1.8 3.7 4.1.6-3 2.9.7 4-3.6-1.9-3.6 1.9.7-4-3-2.9 4.1-.6z"/></svg>
+        </div>
+        <p class="tc-quote">"Le livre d'or vidéo était exactement ce qu'on cherchait. Et le livre d'or avec le vieux téléphone vintage… nos invités ont adoré, on pleure à chaque écoute."</p>
+        <div class="tc-author"><div class="tc-av">LA</div><div><div class="tc-name">Laura & Antoine</div><div class="tc-evt">Mariage · Mai 2024 · Mulhouse</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ FAQ -->
+<section class="faq-sec" id="faq">
+  <div class="wrap">
+    <div class="faq-lay">
+      <div class="faq-st rv">
+        <div class="eyebrow">Questions fréquentes</div>
+        <h2 class="sh">Tout ce que<br>vous voulez<br><em>savoir.</em></h2>
+        <div class="faq-contact">
+          <a href="https://wa.me/33749494437" target="_blank">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp : +33 7 49 49 44 37
+          </a>
+          <a href="https://www.instagram.com/Studiobooth_" target="_blank">
+            <svg width="15" height="15" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+            Instagram : @Studiobooth_
+          </a>
+        </div>
+      </div>
+
+      <div class="faq-list rv d1">
+        <div class="faq-item"><button class="faq-q">Dans quelle zone intervenez-vous ?<span class="faq-icon">+</span></button><div class="faq-a">Principalement en Alsace et Grand Est, mais nous intervenons partout en France. Des frais de déplacement s'appliquent selon la distance depuis Strasbourg.</div></div>
+        <div class="faq-item"><button class="faq-q">Combien de temps à l'avance réserver ?<span class="faq-icon">+</span></button><div class="faq-a">Idéalement 3 à 6 mois avant votre mariage. Les dates de haute saison (mai–octobre) partent très vite. Contactez-nous rapidement pour vérifier votre date.</div></div>
+        <div class="faq-item"><button class="faq-q">Quelle est la différence entre vos prestations ?<span class="faq-icon">+</span></button><div class="faq-a">Le photobooth noir capture des photos avec impression immédiate. Le miroir magique blanc est une expérience interactive full-size. Le 360° crée des vidéos cinématiques. La borne fleurie est un décor du livre d'or vidéo unique. Le livre d'or audio enregistre les messages de vos invités.</div></div>
+        <div class="faq-item"><button class="faq-q">Peut-on personnaliser aux couleurs du mariage ?<span class="faq-icon">+</span></button><div class="faq-a">Totalement. Cadres photo, filtres, messages — tout est personnalisé selon vos couleurs et votre thème de mariage.</div></div>
+        <div class="faq-item"><button class="faq-q">Y a-t-il une limite de photos ou de vidéos ?<span class="faq-icon">+</span></button><div class="faq-a">Oui,le nombres d'impressions dépend de la formule choisi.</div></div>
+        <div class="faq-item"><button class="faq-q">Comment se passe la réservation ?<span class="faq-icon">+</span></button><div class="faq-a">Remplissez notre formulaire en ligne (3 min) ou contactez-nous directement sur WhatsApp au +33 7 49 49 44 37. Nous vous répondons sous 24h avec un devis personnalisé.</div></div>
+        <div class="faq-item"><button class="faq-q">Qu'est-ce que le livre d'or audio vintage ?<span class="faq-icon">+</span></button><div class="faq-a">Un téléphone vintage ivoire et chromé. Vos invités décrochent et enregistrent un message vocal. Vous recevez l'ensemble des messages en fichier audio après l'événement.</div></div>
+        <div class="faq-item"><button class="faq-q">Peut-on combiner plusieurs prestations ?<span class="faq-icon">+</span></button><div class="faq-a">Oui, et c'est même conseillé ! Par exemple Photobooth + Livre d'or audio, ou Photobooth Miroir + Vidéobooth 360°. Contactez-nous pour un pack sur-mesure.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ CTA FINAL -->
+<section class="cta-sec">
+  <div class="wrap-sm">
+    <div class="eyebrow rv" style="justify-content:center">Votre date est encore libre ?</div>
+    <h2 class="sh rv" style="margin-bottom:16px">Réservons votre<br><em>moment ensemble.</em></h2>
+    <p class="rv d1">Les places partent vite. Devis gratuit et personnalisé en moins de 3 minutes.</p>
+    <button class="btn-dark rv d2" onclick="openModal()">
+      Vérifier ma disponibilité
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M3 7.5h9M8 3.5l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div>
+        <div class="ft-logo">
+          <img src="images/logooo.webp" alt="StudioBooth Logo">
+          <div class="ft-logo-txt">StudioBooth<small></div>
+        </div>
+        <p class="ft-desc">Location de photobooth, Photobooth miroir, vidéobooth 360° et livre d'or pour tous vos événements en Alsace et partout en France.</p>
+        <div class="ft-socials">
+          <a href="https://www.instagram.com/Studiobooth_" target="_blank" class="ft-soc" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://wa.me/33749494437" target="_blank" class="ft-soc" aria-label="WhatsApp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Prestations</h4>
+        <ul class="ft-links">
+          <li><a href="#">Photobooth noir</a></li>
+          <li><a href="#">Photobooth miroir</a></li>
+          <li><a href="#">Vidéobooth 360°</a></li>
+          <li><a href="#">Livre d'or vidéo</a></li>
+          <li><a href="#">Livre d'or audio</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Navigation</h4>
+        <ul class="ft-links">
+          <li><a href="#galerie">Galerie</a></li>
+          <li><a href="#avis">Avis clients</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#" onclick="openModal();return false">Devis gratuit</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Contact</h4>
+        <ul class="ft-links">
+          <li><a href="https://wa.me/33749494437" target="_blank">+33 7 49 49 44 37</a></li>
+          <li><a href="https://www.instagram.com/Studiobooth_" target="_blank">@Studiobooth_</a></li>
+          <li><a href="#">Strasbourg, Alsace</a></li>
+          <li><a href="#">Mentions légales</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <p class="ft-copy">© 2025 <span>StudioBooth </span>. Tous droits réservés.</p>
+      <p class="ft-copy">Fait avec soin en <span>Alsace</span> ✦</p>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOAT MOBILE -->
+<button class="float-mob" onclick="openModal()">Obtenir mon devis gratuit →</button>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/33749494437" class="wa" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ══════════════════════════════════════════════════════ MODAL DEVIS -->
+<div class="modal-ov" id="mo" onclick="closeOut(event)">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closeModal()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l10 10M12 2L2 12"/></svg>
+    </button>
+
+    <div class="steps-bar">
+      <div class="s-pip active" id="p1"></div>
+      <div class="s-pip" id="p2"></div>
+      <div class="s-pip" id="p3"></div>
+      <div class="s-pip" id="p4"></div>
+      <span class="s-lbl" id="sl">Étape 1 / 4</span>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="fs active" id="f1">
+      <div class="mh3">Votre <em>événement</em></div>
+      <p class="msub">Parlez-nous de votre grand jour.</p>
+      <div class="field"><label>Date du mariage</label><input type="date"></div>
+      <div class="field"><label>Lieu / Département</label><input type="text" placeholder="Ex: Strasbourg, 67"></div>
+      <div class="field"><label>Nombre d'invités</label>
+        <select><option value="">Sélectionner</option><option>Moins de 50</option><option>50 – 100</option><option>100 – 150</option><option>150 – 200</option><option>200+</option></select>
+      </div>
+      <div class="mactions"><button class="mok" onclick="nxt()">Étape suivante <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="fs" id="f2">
+      <div class="mh3">Vos <em>prestations</em></div>
+      <p class="msub">Sélectionnez ce qui vous fait rêver.</p>
+      <div class="field"><label>Prestations souhaitées</label>
+        <div class="chk-grid">
+          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Photobooth noir</span></label>
+          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Photobooth miroir blanc</span></label>
+          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Vidéobooth 360°</span></label>
+          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Livre d'or vidéo</span></label>
+          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Livre d'or audio</span></label>
+          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Pack combiné</span></label>
+        </div>
+      </div>
+      <div class="field"><label>Durée souhaitée</label><select><option>2 heures</option><option selected>3 heures</option><option>4 heures</option><option>Toute la soirée</option></select></div>
+      <div class="mactions"><button class="mbk" onclick="prv()">← Retour</button><button class="mok" onclick="nxt()">Étape suivante <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="fs" id="f3">
+      <div class="mh3">Vos <em>coordonnées</em></div>
+      <p class="msub">Pour recevoir votre devis sous 24h.</p>
+      <div class="field"><label>Prénom & Nom</label><input type="text" placeholder="Votre nom"></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="votre@email.fr"></div>
+      <div class="field"><label>Téléphone / WhatsApp</label><input type="tel" placeholder="+33 7 00 00 00 00"></div>
+      <div class="field"><label>Message (facultatif)</label><textarea placeholder="Détails sur votre mariage, lieu exact, thème…"></textarea></div>
+      <div class="mactions"><button class="mbk" onclick="prv()">← Retour</button><button class="mok" onclick="nxt()">Envoyer <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M7 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button></div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="fs" id="f4">
+      <div class="success">
+        <div class="s-ring">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 14l7 7 11-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="mh3">Demande <em>envoyée !</em></div>
+        <p class="msub" style="margin-top:12px">Nous vous contactons sous <strong style="color:var(--taupe-light)">24h</strong> avec votre devis personnalisé.<br><br>En attendant, suivez nos créations sur Instagram<br><strong style="color:var(--taupe-light)">@Studiobooth_</strong><br><br>Ou contactez-nous directement sur<br><strong style="color:var(--taupe-light)">WhatsApp : +33 7 49 49 44 37</strong></p>
+        <button class="mok" onclick="closeModal()" style="max-width:180px;margin:28px auto 0">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ JS -->
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,.pc,.gi,.tc,.benef-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hl'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hl'));
+});
+
+// THREAD SCROLL
+const tb=document.getElementById('tb');
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  tb.style.height=Math.min(p,100)+'%';
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+},{passive:true});
+
+// REVEAL
+const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vis');ro.unobserve(x.target);}});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+// COUNTERS
+function animC(el,target,isDec,suf){
+  const dur=2000,s=performance.now();
+  const fn=now=>{const t=Math.min((now-s)/dur,1),e=1-Math.pow(1-t,4),v=isDec?(e*target).toFixed(1):Math.floor(e*target);el.textContent=v+(suf||'');if(t<1)requestAnimationFrame(fn);};
+  requestAnimationFrame(fn);
+}
+const co=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.querySelectorAll('.c-n').forEach(n=>animC(n,parseFloat(n.dataset.target),n.hasAttribute('data-dec'),n.dataset.suffix));co.unobserve(x.target);}});},{threshold:.3});
+document.querySelectorAll('.counters').forEach(el=>co.observe(el));
+
+// FAQ
+document.querySelectorAll('.faq-q').forEach(b=>{b.addEventListener('click',()=>{const it=b.parentElement,op=it.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!op)it.classList.add('open');});});
+
+// MODAL
+let step=1;
+function openModal(){document.getElementById('mo').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(){document.getElementById('mo').classList.remove('open');document.body.style.overflow='';}
+function closeOut(e){if(e.target===document.getElementById('mo'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function ui(){
+  for(let i=1;i<=4;i++){document.getElementById('f'+i).classList.toggle('active',i===step);const p=document.getElementById('p'+i);p.classList.remove('active','done');if(i===step)p.classList.add('active');if(i<step)p.classList.add('done');}
+  document.getElementById('sl').textContent=step<4?`Étape ${step} / 4`:'Confirmé';
+}
+function nxt(){if(step<4){step++;ui();}}
+function prv(){if(step>1){step--;ui();}}
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
+</script>
+</body>
+</html>
