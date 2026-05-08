@@ -1016,7 +1016,40 @@ function ui(){
   for(let i=1;i<=4;i++){document.getElementById('f'+i).classList.toggle('active',i===step);const p=document.getElementById('p'+i);p.classList.remove('active','done');if(i===step)p.classList.add('active');if(i<step)p.classList.add('done');}
   document.getElementById('sl').textContent=step<4?`Étape ${step} / 4`:'Confirmé';
 }
-function nxt(){if(step<4){step++;ui();}}
+function nxt() {
+  if (step === 3) {
+    // Récupère toutes les valeurs du formulaire
+    const data = {
+      date:      document.querySelector('#f1 input[type="date"]').value,
+      lieu:      document.querySelector('#f1 input[type="text"]').value,
+      invites:   document.querySelector('#f1 select').value,
+      prestations: [...document.querySelectorAll('#f2 input[type="checkbox"]:checked')]
+                    .map(c => c.closest('.chk-label').querySelector('span').textContent)
+                    .join(', '),
+      duree:     document.querySelector('#f2 select').value,
+      nom:       document.querySelector('#f3 input[type="text"]').value,
+      email:     document.querySelector('#f3 input[type="email"]').value,
+      telephone: document.querySelector('#f3 input[type="tel"]').value,
+      message:   document.querySelector('#f3 textarea').value,
+    };
+
+    // Envoie à Formspree
+    fetch('https://formspree.io/f/mvzlwgkn', {  // ← remplace TONCODE ici
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (res.ok) { step++; ui(); }
+      else { alert('Erreur envoi. Contactez-nous sur WhatsApp.'); }
+    })
+    .catch(() => { alert('Erreur réseau. Contactez-nous sur WhatsApp.'); });
+
+    return; // attend la réponse avant de passer à l'étape 4
+  }
+
+  if (step < 4) { step++; ui(); }
+}
 function prv(){if(step>1){step--;ui();}}
 
 // SMOOTH SCROLL
