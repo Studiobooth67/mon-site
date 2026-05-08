@@ -1018,7 +1018,6 @@ function ui(){
 }
 function nxt() {
   if (step === 3) {
-    // Récupère toutes les valeurs du formulaire
     const data = {
       date:      document.querySelector('#f1 input[type="date"]').value,
       lieu:      document.querySelector('#f1 input[type="text"]').value,
@@ -1033,19 +1032,34 @@ function nxt() {
       message:   document.querySelector('#f3 textarea').value,
     };
 
-    // Envoie à Formspree
-    fetch('https://formspree.io/f/mvzlwgkn', {  // ← remplace TONCODE ici
+    fetch('https://formspree.io/f/mvzlwgkn', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(data)
     })
     .then(res => {
-      if (res.ok) { step++; ui(); }
-      else { alert('Erreur envoi. Contactez-nous sur WhatsApp.'); }
+      if (res.ok) {
+        // 1. On passe à l'étape de succès visuel
+        step++; 
+        ui();
+
+        // 2. Préparation du message WhatsApp
+        const texteWA = `Bonjour, nouvelle demande de devis !%0A%0A` +
+                        `*Nom:* ${data.nom}%0A` +
+                        `*Date:* ${data.date}%0A` +
+                        `*Prestations:* ${data.prestations}%0A` +
+                        `*Téléphone:* ${data.telephone}`;
+
+        // 3. Ouverture de WhatsApp dans un nouvel onglet
+        window.open(`https://wa.me/33749494437?text=${texteWA}`, '_blank');
+      } 
+      else { 
+        alert('Erreur envoi. Contactez-nous sur WhatsApp.'); 
+      }
     })
     .catch(() => { alert('Erreur réseau. Contactez-nous sur WhatsApp.'); });
 
-    return; // attend la réponse avant de passer à l'étape 4
+    return;
   }
 
   if (step < 4) { step++; ui(); }
