@@ -484,6 +484,91 @@ footer { background: var(--dark-soft); border-top: 1px solid rgba(155,142,130,.0
 .ft-copy { font-size: 12px; color: rgba(155,142,130,.4); }
 .ft-copy span { color: var(--taupe); }
 
+/* ============================================================ MODAL PRESTA CARDS */
+.presta-chk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.presta-chk { position: relative; cursor: pointer; display: block; }
+.presta-chk input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.presta-chk-img {
+  position: relative;
+  height: 110px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color .25s var(--ease);
+}
+.presta-chk-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .5s var(--ease);
+  display: block;
+}
+.presta-chk:hover .presta-chk-img img { transform: scale(1.06); }
+
+.presta-chk-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(20,15,12,.85) 0%, rgba(20,15,12,.2) 100%);
+  transition: background .25s;
+}
+
+.presta-chk-body {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  transition: background .25s, border-color .25s;
+}
+
+.presta-chk-tick {
+  width: 18px; height: 18px; min-width: 18px;
+  border: 1px solid var(--border-dark);
+  display: flex; align-items: center; justify-content: center;
+  color: transparent;
+  transition: all .2s var(--ease);
+}
+
+.presta-chk-name {
+  font-size: 11px; font-weight: 400; letter-spacing: .06em;
+  color: var(--text-muted);
+  transition: color .2s;
+  line-height: 1.3;
+}
+
+/* État sélectionné */
+.presta-chk input:checked ~ .presta-chk-img {
+  border-color: var(--taupe-dark);
+}
+.presta-chk input:checked ~ .presta-chk-img .presta-chk-overlay {
+  background: linear-gradient(to top, rgba(110,98,89,.75) 0%, rgba(110,98,89,.15) 100%);
+}
+.presta-chk input:checked ~ .presta-chk-body {
+  background: rgba(110,98,89,.08);
+  border-color: var(--taupe-dark);
+}
+.presta-chk input:checked ~ .presta-chk-body .presta-chk-tick {
+  background: var(--taupe-dark);
+  border-color: var(--taupe-dark);
+  color: var(--white);
+}
+.presta-chk input:checked ~ .presta-chk-body .presta-chk-name {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Hover non-sélectionné */
+.presta-chk:hover .presta-chk-img { border-color: var(--taupe-light); }
+.presta-chk:hover .presta-chk-body { border-color: var(--taupe-light); }
+
+@media(max-width:480px) {
+  .presta-chk-grid { grid-template-columns: repeat(2, 1fr); }
+  .presta-chk-img { height: 90px; }
+}
+
 /* ============================================================ MODAL */
 .modal-ov { position: fixed; inset: 0; background: rgba(28,22,18,.88); backdrop-filter: blur(12px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; padding: 20px; }
 .modal-ov.open { opacity: 1; pointer-events: all; }
@@ -837,48 +922,48 @@ footer { background: var(--dark-soft); border-top: 1px solid rgba(155,142,130,.0
     </div>
 
     <div class="gallery-grid rv">
-      <div class="gi">
+      <a class="gi" href="https://www.instagram.com/Studiobooth_" target="_blank" rel="noopener">
         <img src="phtbthblanc2.webp" alt="Photobooth mariage salle dorée Alsace" loading="lazy">
         <div class="gi-overlay">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>@Studiobooth_</span>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Voir sur Instagram</span>
         </div>
-      </div>
-      <div class="gi">
+      </a>
+      <a class="gi" href="https://www.instagram.com/Studiobooth_" target="_blank" rel="noopener">
         <img src="photobooth.webp" alt="Photobooth" loading="lazy">
         <div class="gi-overlay">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>@Studiobooth_</span>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Voir sur Instagram</span>
         </div>
-      </div>
-      <div class="gi">
+      </a>
+      <a class="gi" href="https://www.instagram.com/Studiobooth_" target="_blank" rel="noopener">
         <img src="videobooth.webp" alt="Vidéobooth mariage" loading="lazy">
         <div class="gi-overlay">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>@Studiobooth_</span>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Voir sur Instagram</span>
         </div>
-      </div>
-      <div class="gi">
+      </a>
+      <a class="gi" href="https://www.instagram.com/Studiobooth_" target="_blank" rel="noopener">
         <img src="video.webp" alt="Livre d'or vidéo" loading="lazy">
         <div class="gi-overlay">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>@Studiobooth_</span>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Voir sur Instagram</span>
         </div>
-      </div>
-      <div class="gi">
+      </a>
+      <a class="gi" href="https://www.instagram.com/Studiobooth_" target="_blank" rel="noopener">
         <img src="audio.webp" alt="Livre d'or audio vintage" loading="lazy">
         <div class="gi-overlay">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>@Studiobooth_</span>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Voir sur Instagram</span>
         </div>
-      </div>
-      <div class="gi">
+      </a>
+      <a class="gi" href="https://www.instagram.com/Studiobooth_" target="_blank" rel="noopener">
         <img src="phtbthblanc2.webp" alt="StudioBooth mariage élégant" loading="lazy" style="object-position: top;">
         <div class="gi-overlay">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-          <span>@Studiobooth_</span>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="24" height="24" rx="6"/><circle cx="16" cy="16" r="6"/><circle cx="23" cy="9" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Voir sur Instagram</span>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -1103,14 +1188,94 @@ footer { background: var(--dark-soft); border-top: 1px solid rgba(155,142,130,.0
     <div class="fs" id="f2">
       <div class="mh3">Vos <em>prestations</em></div>
       <p class="msub">Sélectionnez ce qui vous fait rêver.</p>
-      <div class="field"><label>Prestations souhaitées</label>
-        <div class="chk-grid">
-          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Photobooth noir</span></label>
-          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Photobooth miroir blanc</span></label>
-          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Vidéobooth 360°</span></label>
-          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Livre d'or vidéo</span></label>
-          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Livre d'or audio</span></label>
-          <label class="chk-label"><input type="checkbox"><div class="chk-box">✓</div><span>Pack combiné</span></label>
+      <div class="field">
+        <label>Prestations souhaitées</label>
+        <div class="presta-chk-grid">
+
+          <label class="presta-chk">
+            <input type="checkbox" name="prestation" value="Photobooth miroir blanc">
+            <div class="presta-chk-img">
+              <img src="phtbthblanc2.webp" alt="Photobooth miroir blanc">
+              <div class="presta-chk-overlay"></div>
+            </div>
+            <div class="presta-chk-body">
+              <div class="presta-chk-tick">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="presta-chk-name">Photobooth Miroir</span>
+            </div>
+          </label>
+
+          <label class="presta-chk">
+            <input type="checkbox" name="prestation" value="Photobooth noir">
+            <div class="presta-chk-img">
+              <img src="photobooth.webp" alt="Photobooth noir">
+              <div class="presta-chk-overlay"></div>
+            </div>
+            <div class="presta-chk-body">
+              <div class="presta-chk-tick">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="presta-chk-name">Photobooth Noir</span>
+            </div>
+          </label>
+
+          <label class="presta-chk">
+            <input type="checkbox" name="prestation" value="Vidéobooth 360°">
+            <div class="presta-chk-img">
+              <img src="videobooth.webp" alt="Vidéobooth 360°">
+              <div class="presta-chk-overlay"></div>
+            </div>
+            <div class="presta-chk-body">
+              <div class="presta-chk-tick">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="presta-chk-name">Vidéobooth 360°</span>
+            </div>
+          </label>
+
+          <label class="presta-chk">
+            <input type="checkbox" name="prestation" value="Livre d'or vidéo">
+            <div class="presta-chk-img">
+              <img src="video.webp" alt="Livre d'or vidéo">
+              <div class="presta-chk-overlay"></div>
+            </div>
+            <div class="presta-chk-body">
+              <div class="presta-chk-tick">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="presta-chk-name">Livre d'or Vidéo</span>
+            </div>
+          </label>
+
+          <label class="presta-chk">
+            <input type="checkbox" name="prestation" value="Livre d'or audio">
+            <div class="presta-chk-img">
+              <img src="audio.webp" alt="Livre d'or audio">
+              <div class="presta-chk-overlay"></div>
+            </div>
+            <div class="presta-chk-body">
+              <div class="presta-chk-tick">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="presta-chk-name">Livre d'or Audio</span>
+            </div>
+          </label>
+
+          <label class="presta-chk">
+            <input type="checkbox" name="prestation" value="Photobooth miroir XL">
+            <div class="presta-chk-img">
+              <img src="phtbthblanc2.webp" alt="Photobooth miroir XL" style="object-position:top">
+              <div class="presta-chk-overlay"></div>
+            </div>
+            <div class="presta-chk-body">
+              <div class="presta-chk-tick">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l3 3 4-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span class="presta-chk-name">Miroir XL</span>
+            </div>
+          </label>
+
         </div>
       </div>
       <div class="field"><label>Durée souhaitée</label><select><option>2 heures</option><option selected>3 heures</option><option>4 heures</option><option>Toute la soirée</option></select></div>
@@ -1194,8 +1359,8 @@ function nxt() {
       date:      document.querySelector('#f1 input[type="date"]').value,
       lieu:      document.querySelector('#f1 input[type="text"]').value,
       invites:   document.querySelector('#f1 select').value,
-      prestations: [...document.querySelectorAll('#f2 input[type="checkbox"]:checked')]
-                    .map(c => c.closest('.chk-label').querySelector('span').textContent)
+      prestations: [...document.querySelectorAll('#f2 input[name="prestation"]:checked')]
+                    .map(c => c.value)
                     .join(', '),
       duree:     document.querySelector('#f2 select').value,
       nom:       document.querySelector('#f3 input[type="text"]').value,
