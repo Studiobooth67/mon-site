@@ -750,13 +750,27 @@ footer { background: var(--dark-soft); border-top: 1px solid rgba(155,142,130,.0
   </div>
 
   <div class="hero-right">
+  <video 
+    autoplay 
+    muted 
+    loop 
+    playsinline
+    preload="metadata"
+    style="width:100%;height:100%;object-fit:cover;display:block;">
+    <source src="videook.mp4" type="video/mp4">
+    <!-- Fallback si vidéo non supportée -->
     <img src="phtbthblanc2.webp" alt="Photobooth mariage luxe Alsace">
-    <div class="hero-right-overlay"></div>
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      Dates disponibles 2026
-    </div>
+  </video>
+  <div class="hero-right-overlay"></div>
+  <div class="hero-card">
+    <div class="hero-card-num">200+</div>
+    <div class="hero-card-lbl">Mariages accompagnés</div>
   </div>
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Dates disponibles 2026
+  </div>
+</div>
 
   <div class="hero-scroll">
     <div class="scroll-line"></div>
